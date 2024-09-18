@@ -21,3 +21,35 @@ commitTransaction();
         throw error;
 }
 }
+
+//Consistency
+
+// Consistency ensures that a transaction brings the database from one valid state to another valid state, maintaining all predefined rules and constraints.
+
+import React, { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const userData = await response.json();
+        
+        // Ensure data consistency
+        if (userData.age < 0 || userData.age > 120) {
+          throw new Error('Invalid age');
+        }
+        
+        setUser(userData);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    }
+    
+    fetchUser();
+  }, [userId]);
+
+  // Render user profile...
+}
