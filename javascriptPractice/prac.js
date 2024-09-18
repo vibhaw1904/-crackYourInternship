@@ -111,3 +111,29 @@ async function simulateConcurrentWithdrawals() {
 }
 
 simulateConcurrentWithdrawals();
+
+
+//durability
+// durability gurantees that once a transaction has been commited , it willl remain commited even in case of sytem failure
+
+async function saveUserPreferences(userId, preferences) {
+    try {
+      const response = await fetch('/api/user-preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, preferences }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save preferences');
+      }
+  
+      // If we get here, the server has confirmed the data is saved durably
+      console.log('User preferences saved successfully');
+    } catch (error) {
+      console.error('Error saving user preferences:', error);
+      // Implement retry logic or inform the user
+    }
+  }
